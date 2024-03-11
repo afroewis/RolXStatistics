@@ -12,6 +12,7 @@ Kanal zu Pushen.
 4. Navigiere zum Verzeichnis, in dem du das Programm gespeichert hast.
 5. Installiere alle Abhängigkeiten und das venv mit dem Befehl `install.bat`
 7. Setze das Passwort für die RolX-Datenbank: `set ROLX_PASSWORD=....`
+8. Setze die URL für den Teams-Connector: `set TEAMS_HOOK="https://mfeng.webhook.office.com/webhookb2/dc1e`
 
 ## Konfiguration
 
@@ -23,12 +24,12 @@ password=password,
 database="rolx_production"
 ```
 
-Falls die Resultate in einen Teams-Kanal gepushed werden sollen, kann im
+Falls die Resultate in einen Teams-Kanal gepushed werden sollen, muss im
 Teams für den Kanal ein incoming Webhook konfiguriert werden (siehe https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook?tabs=newteams%2Cdotnet)
 
-Die Adresse des Webhooks muss danach im `teams_push.py` eingetragen werden:
+Die Adresse des Webhooks muss danach in der Umgebungsvariablen `TEAMS_HOOK` eingetragen werden:
 ```
-TEAMS_HOOK = "https://mfeng.webhook.office.com/webhookb2/...."`
+set TEAMS_HOOK="https://mfeng.webhook.office.com/webhookb2/...."`
 ```
 
 ## Verwendung

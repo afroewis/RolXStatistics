@@ -1,9 +1,16 @@
 import requests
 import json
+import os
 
-TEAMS_HOOK = "https://mfeng.webhook.office.com/webhookb2/dc1e3b78-9986-4199-b0a2-48aa375a0424@7e35793e-43c3-40a6-abde-65b56160d26a/IncomingWebhook/ff6a964c47004123bd4dc74c6206d8e6/a5c82cf7-fad1-42e5-97bc-baaf2b0a1f81"
+
+def __get_teams_hook():
+    if 'TEAMS_HOOK' in os.environ:
+        return os.environ['TEAMS_HOOK']
+    else:
+        raise ValueError('TEAMS_HOOK nicht in Umgebungsvariablen gefunden')
 
 def send_teams_message(title, message):
+    teams_hook = __get_teams_hook()
     headers = {
         'Content-Type': 'application/json'
     }
@@ -13,7 +20,7 @@ def send_teams_message(title, message):
         'title': title,
         'text': message
     }
-    response = requests.post(TEAMS_HOOK, headers=headers, data=json.dumps(data))
+    response = requests.post(teams_hook, headers=headers, data=json.dumps(data))
     if response.status_code != 200:
         raise ValueError(
             'Anfrage an Teams gesendet, aber fehlgeschlagen: Rückgabecode={}, Antwort={}'.format(

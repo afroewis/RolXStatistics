@@ -82,14 +82,11 @@ def format_billabilities_and_get_html(billability):
 
     styled_df = df.style.apply(lambda x: [''] * len(x), axis=1).applymap(billability_map, subset=['Verrechenbarkeit']).applymap(booking_map, subset=['Stundenbuchungsgrad'])
     html = styled_df.to_html(index=False)
-    with open('output.html', 'w') as file:
-        file.write(html)
     return html
 
 def get_billabilties_per_bu(billability):
     # Get an array of billabilities per BU
     billabilities = []
-    #for bu in billability['BU'].unique():
     for bu in BUs:
         part = billability[billability['BU'] == bu].copy()
         print(part.to_string())
@@ -115,7 +112,6 @@ def generate_statistics(data, users, leave):
 def main():
     rolx = rolX()
     data = rolx.get_last_num_days(7)
-    data.to_excel('output.xlsx', index=False)
     users = rolx.get_users()
     leave = rolx.get_last_num_days_levae(7)
     generate_statistics(data, users, leave)
