@@ -1,6 +1,7 @@
 import mysql.connector
 import pandas as pd
 import os
+import logging
 
 BASEQUERY = """
 SELECT r.Date, u.FirstName, u.LastName, sp.Projectnumber, sp.Number AS Subprojectnumber, a.Number AS ActivityNumber, 
@@ -40,7 +41,7 @@ class rolX:
     def __init__(self):
         password = os.getenv('ROLX_PASSWORD')
         if password is None:
-            print("Please set ROLX_PASSWORD environment variable.")
+            logging.error("Please set ROLX_PASSWORD environment variable.")
             return
         self.__mydb = mysql.connector.connect(
             host="rolx-database.mariadb.database.azure.com",
@@ -85,7 +86,7 @@ class rolX:
         result += "|-------|----------|\n"
         for x in headers:
             result += "| "+x[0] + " | " + x[1] + "|\n"
-        print(result)
+        logging.info(result)
         return result
 
     def get_database_schema(self):

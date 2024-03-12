@@ -1,7 +1,7 @@
+import logging
 import requests
 import json
 import os
-
 
 def __get_teams_hook():
     if 'TEAMS_HOOK' in os.environ:
@@ -27,4 +27,4 @@ def send_teams_message(title, message):
             response.status_code, response.text
             )
         )
-    print("Message sent to Teams")
+    logging.info("Message sent to Teams")

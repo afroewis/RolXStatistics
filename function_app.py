@@ -71,7 +71,7 @@ def get_billability(data, users, leave):
     result["Anstellungsgrad"] = result["Anstellungsgrad"].astype(int)
     result["Stundenbuchungsgrad"] = result["Stundenbuchungsgrad"].astype(int)
     
-    print(result.to_string())
+    logging.info(result.to_string())
     return result
 
 def handle_arguments():
@@ -106,7 +106,7 @@ def get_billabilties_per_bu(billability):
     billabilities = []
     for bu in BUs:
         part = billability[billability['BU'] == bu].copy()
-        print(part.to_string())
+        logging.info(part.to_string())
         billabilities.append(part)
     return billabilities
 
@@ -122,6 +122,6 @@ def generate_statistics(data, users, leave):
         send_teams_message("Diese User haben ev. bezahlte Abwesenheiten gehabt oder noch nicht alles gebucht:", notbooked.to_html(index=False))
     else:
         for bu in billabilities:
-            print(bu.iloc[0]['BU']+": Verrechenbarkeit in den letzten 7 Tagen:\n", bu.to_string())
-        print("\nDiese User haben ev. bezahlte Abwesenheiten gehabt oder noch nicht alles gebucht:\n")
-        print(notbooked.to_string())
+            logging.info(bu.iloc[0]['BU']+": Verrechenbarkeit in den letzten 7 Tagen:\n", bu.to_string())
+        logging.info("\nDiese User haben ev. bezahlte Abwesenheiten gehabt oder noch nicht alles gebucht:\n")
+        logging.info(notbooked.to_string())
