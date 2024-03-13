@@ -74,12 +74,6 @@ def get_billability(data, users, leave):
     logging.info(result.to_string())
     return result
 
-def handle_arguments():
-    parser = argparse.ArgumentParser(description='Generate statistics for rolX')
-    parser.add_argument('--sendteams', action='store_true',
-                        help='sends the statistics to the teams channel')
-    return parser.parse_args()
-
 def format_billabilities_and_get_html(billability):
     df = billability
 
@@ -111,17 +105,15 @@ def get_billabilties_per_bu(billability):
     return billabilities
 
 def generate_statistics(data, users, leave):
-    args = handle_arguments()
     billability = get_billability(data, users, leave)
     billabilities = get_billabilties_per_bu(billability)
     notbooked = sqldf("SELECT * FROM billability WHERE (Stundenbuchungsgrad < 80)", locals())
     
-    if args.sendteams:
-        for bu in billabilities:
-            send_teams_message(bu.iloc[0]['BU']+": Verrechenbarkeit in den letzten 7 Tagen:", format_billabilities_and_get_html(bu))
-        send_teams_message("Diese User haben ev. bezahlte Abwesenheiten gehabt oder noch nicht alles gebucht:", notbooked.to_html(index=False))
-    else:
-        for bu in billabilities:
-            logging.info(bu.iloc[0]['BU']+": Verrechenbarkeit in den letzten 7 Tagen:\n", bu.to_string())
-        logging.info("\nDiese User haben ev. bezahlte Abwesenheiten gehabt oder noch nicht alles gebucht:\n")
-        logging.info(notbooked.to_string())
+    for bu in billabilities:
+        buText = bu.iloc[0]['BU']+": Verrechenbarkeit in den letzten 7 Tagen:", format_billabilities_and_get_html(bu)
+        logging.info(buText)
+        send_teams_message(buText)
+
+    notBookedText = "Diese User haben ev. bezahlte Abwesenheiten gehabt oder noch nicht alles gebucht:", notbooked.to_html(index=False)
+    send_teams_message(notBookedText)
+    logging.info(notBookedText)
